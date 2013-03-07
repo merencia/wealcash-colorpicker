@@ -7,6 +7,16 @@
 	        dropdown: false
 	    }
 	    if (configs){$.extend(configs, options);}
+		
+		var toDarkness = function(val, dark){
+			var nVal = val - dark
+			return val > 0 && nVal  > 0 ? nVal : 0;
+		}
+		
+		var toLight = function(val, light){
+			var nVal = val + light
+			return val < 255  && nVal  < 255 ? nVal : 255;
+		}
 
 	    var create_master = function(){
 	    	var master = new Array();
@@ -36,7 +46,7 @@
 	    		master[i]['b'] = b;
 	    		if (rgb == 'r'){
 	    			g = g + aux;
-	    			
+
 	    		}else if(rgb == 'g'){
 	    			if(r > 0){
 	    				r = r - aux;
@@ -65,6 +75,12 @@
 	    			}
 	    		}
 	    	} 
+			var preto = master.length;
+			master[preto] = new Array();
+			master[preto]['r'] = 127;
+	    	master[preto]['g'] = 127;
+	    	master[preto]['b'] = 127;
+			
 	    	return master;
 	    }
 
@@ -75,12 +91,19 @@
 	    	var variant = configs.variant - configs.expurge;
 	    	for(var i = 0; i < variant; i++){
 	    		mat[i] = new Array();
-	    		for (var x in master){
+	    		for (var x = 0; x < master.length - 1;  x++){
 	    			mat[i][x] = new Array();
-	    			mat[i][x]['r'] = master[x]['r'] > 0 && (master[x]['r'] - darken) > 0 ? master[x]['r'] - darken : 0;
-	    			mat[i][x]['g'] = master[x]['g'] > 0 && (master[x]['g'] - darken) > 0 ? master[x]['g'] - darken : 0;
-	    			mat[i][x]['b'] = master[x]['b'] > 0 && (master[x]['b'] - darken) > 0 ? master[x]['b'] - darken : 0;
+	    			mat[i][x]['r'] = toDarkness(master[x]['r'], darken);
+	    			mat[i][x]['g'] = toDarkness(master[x]['g'], darken);
+	    			mat[i][x]['b'] = toDarkness(master[x]['b'], darken);
 	    		}
+				var len = master.length - 1;
+				var val =  Math.round (darken/2);
+				mat[i][len] = new Array();
+				mat[i][len]['r'] = toDarkness(master[x]['r'], val);
+				mat[i][len]['g'] = toDarkness(master[x]['g'], val);
+				mat[i][len]['b'] = toDarkness(master[x]['b'], val);
+				
 	    		darken = darken + aux;
 	    	}
 	    	return mat;
@@ -95,10 +118,19 @@
 	    		mat[i] = new Array();
 	    		for (var x in master){
 	    			mat[i][x] = new Array();
-	    			mat[i][x]['r'] = master[x]['r'] < 255 && (master[x]['r'] + lighten) < 255 ? master[x]['r'] + lighten : 255;
-	    			mat[i][x]['g'] = master[x]['g'] < 255 && (master[x]['g'] + lighten) < 255 ? master[x]['g'] + lighten : 255;
-	    			mat[i][x]['b'] = master[x]['b'] < 255 && (master[x]['b'] + lighten) < 255 ? master[x]['b'] + lighten : 255;
+	    			mat[i][x]['r'] = toLight(master[x]['r'], lighten);
+	    			mat[i][x]['g'] = toLight(master[x]['g'], lighten);
+	    			mat[i][x]['b'] = toLight(master[x]['b'], lighten);
 	    		}
+				
+				var len = master.length - 1;
+				var val =  Math.round (lighten/2);
+				mat[i][len] = new Array();
+				mat[i][len]['r'] = toLight(master[x]['r'], val);
+				mat[i][len]['g'] = toLight(master[x]['g'], val);
+				mat[i][len]['b'] = toLight(master[x]['b'], val);
+				
+				
 	    		lighten = lighten + aux;
 	    	}
 	    	return mat;
@@ -130,8 +162,6 @@
 	    	var g = 255;
 	    	var b = 255;
 
-	    	create_master();
-
 	    	var table = $('<table class="weal-table">');
 
 	    	colors = create_colors();
@@ -139,7 +169,7 @@
 	    	for (var line = 0; line < colors.length; line++){
 	    		var tr = $('<tr>');
 	    		tr.appendTo(table);
-	    		for(var column = 0; column < 6 * configs.between; column++){
+	    		for(var column = 0; column < 6 * configs.between + 1; column++){
 	    			var td = $("<td>");
 	    			td.appendTo(tr);
 	    			var wealspan = $("<span class='weal-color'>");
@@ -147,7 +177,7 @@
 	    			var color = "rgb("+colors[line][column]['r']+","+colors[line][column]['g']+","+colors[line][column]['b']+")";
 	    			wealspan.css("background", color);
 	    			td.attr('data-weal-color',color);
-	    			
+
 	    				td.on('click', function(){
 	    					if(callback != null && typeof callback == "function"){
 		    					var elem = $(this);
@@ -157,7 +187,7 @@
 		    					callback.call(clicked ,elem.data('weal-color'));
 	    					}
 	    				});
-	    			
+
 	    		}
 	    	}
 
@@ -168,15 +198,19 @@
 	    	var root = $(element);
 	    	var dropdown = $("<div class='dropdown'>");
 
+	    	var inputAppend = $("<div class='input-append'>");
+	    	inputAppend.appendTo(dropdown);
+
 	    	//replace root by dropdown
 	    	rootParent = root.parent();
 	    	root.remove();
-	    	root.appendTo(dropdown);
+	    	root.appendTo(inputAppend);
 	    	dropdown.appendTo(rootParent);
 
+
 	    	//add dropdown classes and data
-	    	root.addClass('dropdown-toggle');
-	    	root.attr('data-toggle', "dropdown");
+	    	inputAppend.addClass('dropdown-toggle');
+	    	inputAppend.attr('data-toggle', "dropdown");
 
 	    	//create menu
 	    	var dropdownMenu = $("<ul>");
@@ -185,9 +219,21 @@
 	    	dropdownMenu.attr("role", "dropdown-menu");
 
 	    	var grid = create_grid(dropdownMenu, root);
+
+	    	//create button
+	    	var btn = $("<span class='add-on'>");
+	    	$("<i class='icon-tint'>").appendTo(btn);
+	    	btn.click(function(){
+	    		dropdownMenu.dropdown('toggle');
+	    		return false;
+	    	});
+
+	    	btn.appendTo(inputAppend);
 	    	dropdownMenu.appendTo(dropdown);
 
 	    	root.dropdown();
+
+	    	root.attr('autocomplete', 'off');
 	    }
 
 	    return this.each(function(){

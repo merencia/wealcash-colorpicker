@@ -16,8 +16,13 @@
 	 padding: 0;
 }
 
+.weal-dropdown{
+	position: absolute;
+	z-index: 1000;
+}
 .weal-dropdown table{
 	margin: 5px;
 	margin-left: 7px;
 	margin-right: 7px;
+	
 }
