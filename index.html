@@ -1,0 +1,21 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="css/wealpalette.css"/>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-responsive.css"/>
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="js/wealpalette.js"></script>
+	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+	<input class="weal-palette" />
+</body>
+
+<script type="text/javascript">
+	$('.weal-palette').wealpalette({between: 3, variant: 7, expurge: 2, dropdown: true}, function(color){
+		$(this).css('background', color);
+	});
+</script>
+
+</html>
