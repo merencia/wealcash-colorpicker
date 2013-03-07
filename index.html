@@ -1,21 +1,54 @@
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="css/wealpalette.css"/>
+	
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"/>
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-responsive.css"/>
+	<link rel="stylesheet" type="text/css" href="css/wealpalette.css"/>
 
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="js/wealpalette.js"></script>
 	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
-	<input class="weal-palette" />
+	<form class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label">Color:</label>
+			<div class="controls">
+				<input class="weal-palette" style="height: 30px" type="text"/>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">Tons entre cores:</label>
+			<div class="controls">
+				<input id="tons" style="height: 30px" type="number" value="1" min="1"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">Tons ate preto/branco:</label>
+			<div class="controls">
+				<input id="pretobranco" style="height: 30px" type="number" value="1" min="1"/>
+			</div>
+		</div>
+		<button class="btn" id="vai">Vai</button>
+	</form>
+
+	<div id="grid"></div>
 </body>
 
 <script type="text/javascript">
-	$('.weal-palette').wealpalette({between: 3, variant: 7, expurge: 2, dropdown: true}, function(color){
-		$(this).css('background', color);
+$("#vai").click(function(){
+	var pb = $("#pretobranco").val();
+	var bet = $("#tons").val();
+	$('#grid').html("");
+	$('#grid').wealpalette({between: bet, variant: pb, expurge: 1}, function(color){
+		alert(color);
 	});
+	return false;
+});
+$('.weal-palette').wealpalette({between: 3, variant: 7, expurge: 2, dropdown: true}, function(color){
+	$(this).css('background', color);
+});
+
 </script>
 
 </html>
