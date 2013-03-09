@@ -4,6 +4,8 @@ Is a JQuery Plugin to provide a color picker.
 
 This plugin can be used with [twitter boostrap](http://twitter.github.com/bootstrap/) 
 
+[demo](http://wealcash.github.com/wealcash-colorpicker)
+
 ## Usage
 
  - Inport css and javascript
