@@ -19,13 +19,13 @@ This plugin can be used with [twitter boostrap](http://twitter.github.com/bootst
     ...
     
     <script>
-        $('#grid').wealpalette();
+        $('#grid').wealcolorpicker();
     </script>
     
 If you wanna change default values:
 
     <script>
-        $('#grid').wealpalette({between: 3, variant: 7, expurge: 2});
+        $('#grid').wealcolorpicker({between: 3, variant: 7, expurge: 2});
     </script>
     
 ### Using twitter bootstrap dropdown:
@@ -35,7 +35,7 @@ If you wanna change default values:
     ...
     
     <script>
-        $('#grid').wealpalette({between: 3, variant: 7, expurge: 2, dropdown: true}});
+        $('#grid').wealcolorpicker({between: 3, variant: 7, expurge: 2, dropdown: true}});
     </script>
     
 ## Handling Events
