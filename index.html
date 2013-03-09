@@ -2,10 +2,10 @@
 <head>
 	
 	<link rel="stylesheet" type="text/css" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"/>
-	<link rel="stylesheet" type="text/css" href="css/wealpalette.css"/>
+	<link rel="stylesheet" type="text/css" href="css/wealcolorpicker.css"/>
 
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="js/wealpalette.js"></script>
+	<script type="text/javascript" src="js/wealcolorpicker.js"></script>
 	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
 </head>
 <body>
@@ -13,7 +13,7 @@
 		<div class="control-group">
 			<label class="control-label">Color:</label>
 			<div class="controls">
-				<input class="weal-palette" style="height: 30px" type="text"/>
+				<input class="weal-colorpicker" style="height: 30px" type="text"/>
 			</div>
 		</div>
 
@@ -46,15 +46,18 @@ $("#go").click(function(){
 	var pb = $("#pretobranco").val();
 	var bet = $("#tons").val();
 	$('#grid').html("");
-	$('#grid').wealpalette({between: bet, variant: pb, expurge: 1});
+	$('#grid').wealcolorpicker({between: bet, variant: pb, expurge: 1});
 	return false;
 });
 
 $('#grid').on('colorSelected', colorSelected);
 
-$('.weal-palette').wealpalette({between: 3, variant: 7, expurge: 2, dropdown: true});
+$('.weal-colorpicker').wealcolorpicker({between: 3, variant: 7, expurge: 2, dropdown: true});
 
-$('.weal-palette').on('colorSelected', colorSelected);
+$('.weal-colorpicker').on('colorSelected', function (event){
+	$("body").css("background-color", event.color);
+	console.log(event.color);
+});
 
 </script>
 
