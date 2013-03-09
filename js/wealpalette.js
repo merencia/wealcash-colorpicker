@@ -1,205 +1,177 @@
+/*
+Wealpalette 0.1
+
+Author: Lucas José Merencia <lucas.merencia@gmail.com>
+*/
 (function($){
-	$.fn.wealpalette = function(options, callback){
+	/*
+	Generate a color palette based on RGB colors:
+	   255,0,0
+	   255,255,0
+	   0,255,0
+	   0,255,255
+	   0,0,255
+	   255,0,255 
+
+	Params:
+	 - options{
+	     beetwen:  shades of colors between main colors 
+
+	     variant:  shades of colors between the foreground color to black and 
+	               foreground color to white
+
+	     expurge:  disregarded colors on top and bottom of the grid
+
+	     dropdown: creates a dropdown to grid (require bootstrap dropdown: 
+	               <http://twitter.github.com/bootstrap/components.html#dropdowns> )
+	   }
+	*/
+	$.fn.wealpalette = function(options){
 		var configs = {
-	        between: 3,
-	        variant: 2,
-	        expurge: 0,
-	        dropdown: false
-	    }
-	    if (configs){$.extend(configs, options);}
-		
-		var toDarkness = function(val, dark){
-			var nVal = val - dark
-			return val > 0 && nVal  > 0 ? nVal : 0;
+			between: 3,
+			variant: 2,
+			expurge: 0,
+			dropdown: false
 		}
+		if (configs){$.extend(configs, options);}
 		
-		var toLight = function(val, light){
-			var nVal = val + light
-			return val < 255  && nVal  < 255 ? nVal : 255;
+		/*define a color*/
+		var RGB = function(r,g,b){
+			this.r = r;
+			this.g = g;
+			this.b = b;
 		}
 
-	    var create_master = function(){
-	    	var master = new Array();
-	    	var rgb = 'r';
-	    	var r = 255;
-	    	var g = 0;
-	    	var b = 0;
-	    	var aux = Math.round(255/configs.between);
-	    	for(var i = 0; i < (configs.between * 6); i++){
-	    		if(g >= 255){
-	    			g = 255;
-	    			rgb = 'g';
-	    		}
+		/*Increment a value to 255*/
+		var increment = function(val, add){
+			val += add;
+			return val > 255 ? 255 : val;
+		}
+		/*Decrement a value to 0*/
+		var decrement = function(val, add){
+			val -= add;
+			return val < 0 ? 0 : val;
+		}
 
-	    		if(b >= 255){
-	    			b = 255;
-	    			rgb = 'b';
-	    		}
-
-	    		if(b >= 255){
-	    			b = 255;
-	    		}
-
-	    		master[i] = new Array();
-	    		master[i]['r'] = r;
-	    		master[i]['g'] = g;
-	    		master[i]['b'] = b;
-	    		if (rgb == 'r'){
-	    			g = g + aux;
-
-	    		}else if(rgb == 'g'){
-	    			if(r > 0){
-	    				r = r - aux;
-	    				if (r < 0){
-	    					r = 0;
-	    				}
-	    			}else{
-	    				b = b + aux;
-	    				if(b >= 255){
-	    					b = 255;
-	    				}
-	    			}
-	    		}else if(rgb == 'b'){
-	    			if (g > 0){
-	    				g = g - aux;
-	    				if (g < 0){
-	    					g = 0;
-	    				}
-	    			}else if (r < 255){
-	    				r = r + aux;
-	    				if (r >= 255){
-	    					r = 255;
-	    				}
-	    			}else{
-	    				b = b - aux;
-	    			}
-	    		}
-	    	} 
-			var preto = master.length;
-			master[preto] = new Array();
-			master[preto]['r'] = 127;
-	    	master[preto]['g'] = 127;
-	    	master[preto]['b'] = 127;
+		/* create main colorss*/
+		var createMaster = function(){
+			var master = new Array();
+			var rgb = new RGB(255,0,0);
+			var between = configs.between;
+			var interval = Math.round(255/between);
+			for(var i = 0; i < (between * 6); i++){
+				master[i] = new RGB(rgb.r,rgb.g,rgb.b);
+				//Color start with RGB(255,0,0)
+				//First upping G to 255
+				//when RGB(255,255,0) I down R to 0 then up B to 255 (now G always is 255)
+				//when RGB(0,255,255) I down G to 0 then up R to 255 again
+				if (rgb.g < 255 && rgb.b == 0){
+					rgb.g = increment(rgb.g, interval);
+				}else if(rgb.g == 255 && (rgb.r > 0 || rgb.b < 255) ){
+					if(rgb.r > 0){
+						rgb.r = decrement(rgb.r, interval);
+					}else{
+						rgb.b = increment(rgb.b, interval);
+					}
+				}else{
+					if (rgb.g > 0){
+						rgb.g = decrement(rgb.g,interval);
+					}else if (rgb.r < 255){
+						rgb.r = increment(rgb.r,interval);
+					}else{
+						rgb.b = decrement(rgb.b,interval);
+					}
+				}
+			} 
+			//add column to monochromatic colors
+			var black = master.length;
+			master[black] = new RGB(127,127,127);
 			
-	    	return master;
-	    }
+			return master;
+		}
 
-	    var create_variant_darken = function(master){
-	    	var mat = new Array();
-	    	var aux = Math.round(255/configs.variant);
-	    	var darken = aux;
-	    	var variant = configs.variant - configs.expurge;
-	    	for(var i = 0; i < variant; i++){
-	    		mat[i] = new Array();
-	    		for (var x = 0; x < master.length - 1;  x++){
-	    			mat[i][x] = new Array();
-	    			mat[i][x]['r'] = toDarkness(master[x]['r'], darken);
-	    			mat[i][x]['g'] = toDarkness(master[x]['g'], darken);
-	    			mat[i][x]['b'] = toDarkness(master[x]['b'], darken);
-	    		}
+		/*creates variation in color from black to white*/
+		var createVariant = function(master, fn){
+			var mat = new Array();
+			var aux = Math.round(255/configs.variant);
+			var darken = aux;
+			var variant = configs.variant - configs.expurge;
+			for(var i = 0; i < variant; i++){
+				mat[i] = new Array();
+				for (var x = 0; x < master.length - 1;  x++){
+					mat[i][x] = new RGB(
+							fn(master[x].r, darken),
+							fn(master[x].g, darken),
+							fn(master[x].b, darken)
+						);
+				}
+				//for monochrome column change only half the variation
 				var len = master.length - 1;
 				var val =  Math.round (darken/2);
-				mat[i][len] = new Array();
-				mat[i][len]['r'] = toDarkness(master[x]['r'], val);
-				mat[i][len]['g'] = toDarkness(master[x]['g'], val);
-				mat[i][len]['b'] = toDarkness(master[x]['b'], val);
+				mat[i][len] = new RGB(
+						fn(master[x].r, val),
+						fn(master[x].g, val),
+						fn(master[x].b, val)
+					);
 				
-	    		darken = darken + aux;
-	    	}
-	    	return mat;
-	    }
+				darken = darken + aux;
+			}
+			return mat;
+		}
 
-	    var create_variant_lighten = function(master){
-	    	var mat = new Array();
-	    	var aux = Math.round(255/configs.variant);
-	    	var lighten = aux;
-	    	var variant = configs.variant - configs.expurge;
-	    	for(var i = 0; i < variant; i++){
-	    		mat[i] = new Array();
-	    		for (var x in master){
-	    			mat[i][x] = new Array();
-	    			mat[i][x]['r'] = toLight(master[x]['r'], lighten);
-	    			mat[i][x]['g'] = toLight(master[x]['g'], lighten);
-	    			mat[i][x]['b'] = toLight(master[x]['b'], lighten);
-	    		}
-				
-				var len = master.length - 1;
-				var val =  Math.round (lighten/2);
-				mat[i][len] = new Array();
-				mat[i][len]['r'] = toLight(master[x]['r'], val);
-				mat[i][len]['g'] = toLight(master[x]['g'], val);
-				mat[i][len]['b'] = toLight(master[x]['b'], val);
-				
-				
-	    		lighten = lighten + aux;
-	    	}
-	    	return mat;
-	    }
+		/* Creates color matrix */
+		var createColors = function(){
+			var master = createMaster();
+			var lighten = createVariant(master,increment);
+			var darken = createVariant(master,decrement);
+			darken.reverse();
+			darken.push(master);
+			return darken.concat(lighten);
+		}
 
-	    var create_colors = function(){
-	    	var master = create_master();
-	    	var lighten = create_variant_lighten(master);
-	    	var darken = create_variant_darken(master);
-	    	darken.reverse();
+		var createGrid = function(element, clicked){
+			var root = $(element);
 
-	    	var mat = new Array();
-	    	for (var i in darken){
-	    		mat.push(darken[i]);
-	    	}
+			var r = 255;
+			var g = 255;
+			var b = 255;
 
-	    	mat.push(master);
+			var table = $('<table class="weal-table">');
 
-	    	for (var i in lighten){
-	    		mat.push(lighten[i]);
-	    	}
-	    	return mat;
-	    }
+			colors = createColors();
+			for (var line = 0; line < colors.length; line++){
+				var tr = $('<tr>');
+				tr.appendTo(table);
+				for(var column = 0; column < 6 * configs.between + 1; column++){
+					var td = $("<td>");
+					td.appendTo(tr);
+					var wealbutton = $("<button class='weal-color'>");
+					wealbutton.appendTo(td);
+					var color = "rgb("+colors[line][column]['r']+","+colors[line][column]['g']+","+colors[line][column]['b']+")";
+					wealbutton.css("background", color);
+					wealbutton.attr("data-color", color);
+					wealbutton.on('click', function(){
+						$(clicked).trigger({type: "colorSelected", color: wealbutton.data('color')});
+						$(root).trigger({type: "colorSelected", color: wealbutton.data('color')});
+					});
+					wealbutton.on('focusin', function(){
+						$(this).addClass('wealcolor-in');
+					});
+					wealbutton.on('focusout', function(){
+						$(this).removeClass('wealcolor-in');
+					});
+				}
+			}
 
-	    var create_grid = function(element, clicked){
-	    	var root = $(element);
+			table.appendTo(root);
+		}
 
-	    	var r = 255;
-	    	var g = 255;
-	    	var b = 255;
+		var create_dropdown = function(element){
+			var root = $(element);
+			var dropdown = $("<div class='dropdown'>");
 
-	    	var table = $('<table class="weal-table">');
-
-	    	colors = create_colors();
-	    	create_variant_darken(colors);
-	    	for (var line = 0; line < colors.length; line++){
-	    		var tr = $('<tr>');
-	    		tr.appendTo(table);
-	    		for(var column = 0; column < 6 * configs.between + 1; column++){
-	    			var td = $("<td>");
-	    			td.appendTo(tr);
-	    			var wealspan = $("<span class='weal-color'>");
-	    			wealspan.appendTo(td);
-	    			var color = "rgb("+colors[line][column]['r']+","+colors[line][column]['g']+","+colors[line][column]['b']+")";
-	    			wealspan.css("background", color);
-	    			td.attr('data-weal-color',color);
-
-	    				td.on('click', function(){
-	    					if(callback != null && typeof callback == "function"){
-		    					var elem = $(this);
-		    					if(configs.dropdown){
-		    						$(".dropdown-toggle").dropdown('toggle');
-		    					}
-		    					callback.call(clicked ,elem.data('weal-color'));
-	    					}
-	    				});
-
-	    		}
-	    	}
-
-	    	table.appendTo(root);
-	    }
-
-	    var create_dropdown = function(element){
-	    	var root = $(element);
-	    	var dropdown = $("<div class='dropdown'>");
-
-	    	var inputAppend = $("<div class='input-append'>");
-	    	inputAppend.appendTo(dropdown);
+			var inputAppend = $("<div class='input-append'>");
+			inputAppend.appendTo(dropdown);
 
 	    	//replace root by dropdown
 	    	rootParent = root.parent();
@@ -218,7 +190,7 @@
 	    	dropdownMenu.addClass("weal-dropdown");
 	    	dropdownMenu.attr("role", "dropdown-menu");
 
-	    	var grid = create_grid(dropdownMenu, root);
+	    	var grid = createGrid(dropdownMenu, root);
 
 	    	//create button
 	    	var btn = $("<span class='add-on'>");
@@ -226,6 +198,9 @@
 	    	btn.click(function(){
 	    		dropdownMenu.dropdown('toggle');
 	    		return false;
+	    	});
+	    	root.on('focusin', function(){
+	    		dropdownMenu.dropdown('toggle');
 	    	});
 
 	    	btn.appendTo(inputAppend);
@@ -240,7 +215,7 @@
 	    	if(configs.dropdown){
 	    		create_dropdown(this);
 	    	}else{
-	    		create_grid(this);
+	    		createGrid(this);
 	    	}
 	    });
 	}

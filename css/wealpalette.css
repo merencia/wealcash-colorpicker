@@ -5,6 +5,14 @@
 	border: 1px solid #eee;
 }
 
+.wealcolor-in{
+	height: 26px;
+	width: 26px;
+	position: absolute;
+	margin-top: -13px;
+	margin-left: -3px;
+}
+
 .weal-table{
 	/*border: 1px solid #000;*/
 	border-spacing:0;

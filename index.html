@@ -36,17 +36,24 @@
 </body>
 
 <script type="text/javascript">
+
+
 $("#vai").click(function(){
 	var pb = $("#pretobranco").val();
 	var bet = $("#tons").val();
 	$('#grid').html("");
-	$('#grid').wealpalette({between: bet, variant: pb, expurge: 1}, function(color){
-		alert(color);
-	});
+	$('#grid').wealpalette({between: bet, variant: pb, expurge: 1});
 	return false;
 });
-$('.weal-palette').wealpalette({between: 3, variant: 7, expurge: 2, dropdown: true}, function(color){
-	$(this).css('background', color);
+
+$('#grid').on('colorSelected', function colorSelected(event){
+	console.log(event.color);
+});
+
+$('.weal-palette').wealpalette({between: 3, variant: 7, expurge: 2, dropdown: true});
+
+$('.weal-palette').on('colorSelected', function colorSelected(event){
+	console.log(event.color);
 });
 
 </script>
