@@ -1,12 +1,12 @@
 <html>
 <head>
 	
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"/>
+	<link rel="stylesheet" type="text/css" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"/>
 	<link rel="stylesheet" type="text/css" href="css/wealpalette.css"/>
 
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="js/wealpalette.js"></script>
-	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
 </head>
 <body>
 	<form class="form-horizontal">
@@ -31,12 +31,16 @@
 		</div>
 		<button class="btn" id="vai">Vai</button>
 	</form>
-
+	
 	<div id="grid"></div>
+	
 </body>
 
 <script type="text/javascript">
-
+function colorSelected(event){
+	$("body").css("background-color", event.color);
+	console.log(event.color);
+}
 
 $("#vai").click(function(){
 	var pb = $("#pretobranco").val();
@@ -46,15 +50,11 @@ $("#vai").click(function(){
 	return false;
 });
 
-$('#grid').on('colorSelected', function colorSelected(event){
-	console.log(event.color);
-});
+$('#grid').on('colorSelected', colorSelected);
 
 $('.weal-palette').wealpalette({between: 3, variant: 7, expurge: 2, dropdown: true});
 
-$('.weal-palette').on('colorSelected', function colorSelected(event){
-	console.log(event.color);
-});
+$('.weal-palette').on('colorSelected', colorSelected);
 
 </script>
 
