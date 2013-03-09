@@ -1,5 +1,5 @@
 /*
-Wealpalette 0.1
+Wealcash-colorpicker 0.1
 
 Author: Lucas José Merencia <lucas.merencia@gmail.com>
 */
@@ -26,7 +26,7 @@ Author: Lucas José Merencia <lucas.merencia@gmail.com>
 	               <http://twitter.github.com/bootstrap/components.html#dropdowns> )
 	   }
 	*/
-	$.fn.wealpalette = function(options){
+	$.fn.wealcolorpicker = function(options){
 		var configs = {
 			between: 3,
 			variant: 2,

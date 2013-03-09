@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
 </head>
 <body>
-	<form class="form-horizontal">
+	<form>
 		<div class="control-group">
 			<label class="control-label">Color:</label>
 			<div class="controls">
@@ -18,18 +18,18 @@
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Tons entre cores:</label>
+			<label class="control-label">Shades of colors between main colors:</label>
 			<div class="controls">
 				<input id="tons" style="height: 30px" type="number" value="1" min="1"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">Tons ate preto/branco:</label>
+			<label class="control-label">shades of colors between the foreground color to black and foreground color to white:</label>
 			<div class="controls">
 				<input id="pretobranco" style="height: 30px" type="number" value="1" min="1"/>
 			</div>
 		</div>
-		<button class="btn" id="vai">Vai</button>
+		<button class="btn" id="go">Go !</button>
 	</form>
 	
 	<div id="grid"></div>
@@ -42,7 +42,7 @@ function colorSelected(event){
 	console.log(event.color);
 }
 
-$("#vai").click(function(){
+$("#go").click(function(){
 	var pb = $("#pretobranco").val();
 	var bet = $("#tons").val();
 	$('#grid').html("");
