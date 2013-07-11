@@ -11,7 +11,7 @@ Author: Lucas José Merencia <lucas.merencia@gmail.com>
 	   0,255,0
 	   0,255,255
 	   0,0,255
-	   255,0,255 
+	   255,0,255
 
 	Params:
 	 - options{
@@ -55,7 +55,7 @@ Author: Lucas José Merencia <lucas.merencia@gmail.com>
 
 		/* create main colorss*/
 		var createMaster = function(){
-			var master = new Array();
+			var master = [];
 			var rgb = new RGB(255,0,0);
 			var between = configs.between;
 			var interval = Math.round(255/between);
@@ -92,12 +92,12 @@ Author: Lucas José Merencia <lucas.merencia@gmail.com>
 
 		/*creates variation in color from black to white*/
 		var createVariant = function(master, fn){
-			var mat = new Array();
+			var mat = [];
 			var aux = Math.round(255/configs.variant);
 			var darken = aux;
 			var variant = configs.variant - configs.expurge;
 			for(var i = 0; i < variant; i++){
-				mat[i] = new Array();
+				mat[i] = [];
 				for (var x = 0; x < master.length - 1;  x++){
 					mat[i][x] = new RGB(
 							fn(master[x].r, darken),
