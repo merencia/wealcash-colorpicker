@@ -151,8 +151,8 @@ Author: Lucas José Merencia <lucas.merencia@gmail.com>
 					wealbutton.css("background", color);
 					wealbutton.attr("data-color", color);
 					wealbutton.on('click', function(){
-						$(clicked).trigger({type: "wcp.colorSelected", color: $(this).data('color')});
-						$(root).trigger({type: "wcp.colorSelected", color: $(this).data('color')});
+						$(clicked).trigger({type: "wcp.onSelect", color: $(this).data('color')});
+						$(root).trigger({type: "wcp.onSelect", color: $(this).data('color')});
 					});
 					wealbutton.on('focusin', function(){
 						$(this).addClass('wealcolor-in');
