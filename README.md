@@ -1,51 +1,65 @@
-# Wealcash-colorpicker
+# Wealcash ColorPicker
 
-Is a JQuery Plugin to provide a color picker.
+It's a jQuery plugin which provide a color picker for your web based applications.
 
-This plugin can be used with [twitter boostrap](http://twitter.github.com/bootstrap/) 
+This plugin may be used alongside [Twitter Bootstrap](http://twitter.github.com/bootstrap/).
 
-[demo](http://wealcash.github.com/wealcash-colorpicker)
+## Demo
+
+You can see it working [here](http://wealcash.github.com/wealcash-colorpicker).
 
 ## Usage
 
- - Inport css and javascript
+ - Import css and javascript to your HTML file;
 
- - Call the function wealcolorpicker
+ - Call the function `wealcolorpicker`;
 
 ## Example
 
 ### Simple Grid
 
-    <div id="grid"></div>
-    
-    ...
-    
-    <script>
-        $('#grid').wealcolorpicker();
-    </script>
-    
-If you wanna change default values:
+```html
+<div id="grid"></div>
 
-    <script>
-        $('#grid').wealcolorpicker({between: 3, variant: 7, expurge: 2});
-    </script>
+<script>
+  $('#grid').wealcolorpicker();
+</script>
+```
+    
+If you wanna change the default values:
+
+```html
+<script>
+	$('#grid').wealcolorpicker({
+		between: 3,
+		variant: 7,
+		expurge: 2
+	});
+</script>
+```
     
 ### Using twitter bootstrap dropdown:
 
-    <input class="weal-colorpicker"/>
-    
-    ...
-    
-    <script>
-        $('#grid').wealcolorpicker({between: 3, variant: 7, expurge: 2, dropdown: true}});
-    </script>
+```html
+<input class="weal-colorpicker"/>
+<script>
+	$('#grid').wealcolorpicker({
+		between: 3,
+		variant: 7,
+		expurge: 2,
+		dropdown: true
+	});
+</script>
+```
     
 ## Handling Events
 
-    $('.weal-colorpicker').on('colorSelected', function (event){
-       $("body").css("background-color", event.color);
-	      console.log(event.color);
-    });
+```javascript
+$('.weal-colorpicker').on('colorSelected', function (event) {
+	$('body').css('background-color', event.color);
+	console.log(event.color);
+});
+```
 
 ## Contributing
 
