@@ -18,7 +18,7 @@ You can see it working [here](http://wealcash.github.com/wealcash-colorpicker).
 
 ### Simple Grid
 
-```javascript
+```html
 <div id="grid"></div>
 
 <script>
@@ -28,15 +28,19 @@ You can see it working [here](http://wealcash.github.com/wealcash-colorpicker).
     
 If you wanna change the default values:
 
-```javascript
+```html
 <script>
-  $('#grid').wealcolorpicker({between: 3, variant: 7, expurge: 2});
+	$('#grid').wealcolorpicker({
+		between: 3,
+		variant: 7,
+		expurge: 2
+	});
 </script>
 ```
     
 ### Using twitter bootstrap dropdown:
 
-```javascript
+```html
 <input class="weal-colorpicker"/>
 <script>
 	$('#grid').wealcolorpicker({
