@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 </head>
 <body>
-	<form>
+	<form class="form-inline">
 		<div class="control-group">
 			<label class="control-label">Color:</label>
 			<div class="controls">
@@ -52,7 +52,7 @@ $("#go").click(function(){
 
 $('#grid').on('colorSelected', colorSelected);
 
-$('.weal-colorpicker').wealcolorpicker({between: 3, variant: 7, expurge: 2, dropdown: true});
+$('.weal-colorpicker').wealcolorpicker({between: 2, variant: 7, expurge: 2, dropdown: true});
 
 $('.weal-colorpicker').on('colorSelected', function (event){
 	$("body").css("background-color", event.color);
