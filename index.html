@@ -50,11 +50,11 @@ $("#go").click(function(){
 	return false;
 });
 
-$('#grid').on('colorSelected', colorSelected);
+$('#grid').on('wcp.colorSelected', colorSelected);
 
 $('.weal-colorpicker').wealcolorpicker({between: 2, variant: 7, expurge: 2, dropdown: true});
 
-$('.weal-colorpicker').on('colorSelected', function (event){
+$('.weal-colorpicker').on('wcp.colorSelected', function (event){
 	$("body").css("background-color", event.color);
 	console.log(event.color);
 });
