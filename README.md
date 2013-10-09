@@ -43,7 +43,7 @@ If you wanna change the default values:
 ```html
 <input class="weal-colorpicker"/>
 <script>
-	$('#grid').wealcolorpicker({
+	$('.weal-colorpicker').wealcolorpicker({
 		between: 3,
 		variant: 7,
 		expurge: 2,
